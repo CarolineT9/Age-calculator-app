@@ -1,4 +1,4 @@
-/* * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -17,8 +17,9 @@ body {
 }
 
 main {
-    height: 55dvh;
-    width: 45dvw;
+    height: 70dvh;
+    min-width:30dvw;
+    max-width: 90dvw;
     background-color: hsl(0, 0%, 100%);
     border-radius: 1.5rem .9rem 12.5rem 1.5rem;
 }
@@ -34,38 +35,39 @@ main {
 .input-box {
     display: flex;
     flex-direction: column;
-    width: 100dvw;
-
-}
+   
+    }
 
 
 .form input {
     height: 4rem;
-    width: 12rem;
+    max-width: 4rem;
+    margin-right: 1rem;
     margin-top: .4rem;
     border-radius: .3rem;
     border: 1px solid hsl(0, 0%, 86%);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: hsl(0, 0%, 8%);
     font-weight: 600;
     padding: 0.7rem;
 
 }
-
-
 .form label {
     color: hsl(0, 1%, 44%);
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 .results {
     margin-left: 3rem;
     line-height: 4.5rem;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: bolder;
     margin-top: -2rem;
 }
 
 hr {
+    width: 72dvw;
     margin-left: 3rem;
     margin-right: 6rem;
     border: none;
@@ -78,66 +80,84 @@ hr {
 .btn {
     position: relative;
     top: -2rem;
-    left: 47rem;
+    left: 9rem;
     background-color: hsl(259, 100%, 65%);
     border: none;
-    width: 5rem;
-    height: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     border-radius: 6rem;
     cursor: pointer;
 }
 
 .results span {
     color: hsl(259, 100%, 65%);
-} */
-
-@media(max-width: 700px) {
-    
-    .main { 
-        min-height: 90dvh;
-        min-width: 90dvw;
-    }
-    .form {
-     
-        padding: 1rem;
-    }
-    .input-box {
+} 
+.error{
+    color: red;
+    font-size: 0.6rem;
+    width: 100%;
+   
+}
+label.error {
+    font-size: 1rem;
+    color: red;
+  }
+.input-box input.invalid {
+    border: 2px solid red;
+  }
+@media (min-width: 700px) and (max-width:1020px) {
+    main {  
+        /* min-width: 50dvw;      */
+        max-width: 80dvw;
        
-        width: 90dvw;
-    
     }
     .form input {
-        height: 3rem;
-        width: 4.5rem;
-        margin-top: .2rem;
-        font-size: 1rem;
-        padding: 0.2rem;
-    
+        height: 4rem;
+        max-width: 9rem;
+        font-size: 2.3rem;  
+  }
+  .results {
+    margin-top: 0.3rem;
+    font-size: 2.3rem;
+ 
+}
+hr{
+    width: 45dvh;
+    margin-top: 1rem;
+}
+.btn{
+    top: -2.5rem;
+    left: 15rem;
+    width: 5rem;
+    height: 5rem;
+}
+
+}
+@media(min-width: 1021px){
+    main {  
+        /* min-width: 50dvw;      */
+        max-width: 50dvw;
+       
     }
-    .btn {
-        position: relative;
-        top: -1.6rem;
-        left: 7.2rem;   
-        border: none;
-        width: 3.5rem;
-        height: 3.5rem;
-    }
-    .results {
-        margin-left: 1rem;
-        line-height: 4.5rem;
-        font-size: 1.2rem;
-        margin-top: -2rem;
-    }
-    hr {
-        margin-left: 1rem;
-        margin-right: 1rem;
-        margin-top: 2rem;
-        border: none;
-        border-top: 1px solid hsl(0, 0%, 86%);
-        ;
-    
-    
-    }
-    
-    
+    .form input {
+        height: 4rem;
+        max-width: 9rem;
+        font-size: 2.6rem;  
+  }
+  .results {
+  
+    font-size: 2.6rem;
+ 
+}
+hr{
+    width: 58dvh;
+    margin-top: 1rem;
+}
+.btn{
+    top: -2.7rem;
+    left: 15rem;
+    width: 5rem;
+    height: 5rem;
+}
+
 }

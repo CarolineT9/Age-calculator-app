@@ -3,103 +3,79 @@ const form = document.querySelector("#formulario");
 form.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const inputDay = document.querySelector("#day");
-  const inputMonth = document.querySelector("#month");
-  const inputYear = document.querySelector("#year");
 
-  const dayError = document.querySelector("#day + .error-message");
-  const monthError = document.querySelector("#month + .error-message");
-  const yearError = document.querySelector("#year + .error-message");
+  let inputDay = document.querySelector('#day');
+  let inputMonth = document.querySelector('#month');
+  let inputYear = document.querySelector('#year');
 
-  const resultYears = document.querySelector("section:nth-of-type(2) h1:nth-of-type(1) span");
-  const resultMonths = document.querySelector("section:nth-of-type(2) h1:nth-of-type(2) span");
-  const resultDays = document.querySelector("section:nth-of-type(2) h1:nth-of-type(3) span");
+  let day = parseInt(inputDay.value)
+  let month = parseInt(inputMonth.value)
+  let year = parseInt(inputYear.value)
 
-  // Clear previous results and errors
-  resultYears.textContent = "--";
-  resultMonths.textContent = "--";
-  resultDays.textContent = "--";
-  dayError.textContent = "";
-  monthError.textContent = "";
-  yearError.textContent = "";
-
-  const day = parseInt(inputDay.value);
-  const month = parseInt(inputMonth.value);
-  const year = parseInt(inputYear.value);
-
-  // Function to validate the date
-  function validateDate(day, month, year) {
-    const currentYear = new Date().getFullYear();
-    let isValid = true;
-
-    // Reset errors
-    dayError.textContent = monthError.textContent = yearError.textContent = "";
-
-    // Validate day, month, and year
-    if (isNaN(day) || day < 1 || day > 31) {
-      dayError.textContent = "Day must be between 1 and 31.";
-      isValid = false;
-    }
-
-    if (isNaN(month) || month < 1 || month > 12) {
-      monthError.textContent = "Month must be between 1 and 12.";
-      isValid = false;
-    }
-
-    if (isNaN(year) || year < 1900 || year > currentYear) {
-      yearError.textContent = `Year must be between 1900 and ${currentYear}.`;
-      isValid = false;
-    }
-
-    // Check if the date is valid
-    const testDate = new Date(year, month - 1, day);
-    if (testDate.getDate() !== day || testDate.getMonth() !== month - 1 || testDate.getFullYear() !== year) {
-      yearError.textContent = "Invalid date.";
-      isValid = false;
-    }
-
-    // Check if the date is in the future
-    if (new Date(year, month - 1, day) > new Date()) {
-      yearError.textContent = "Date cannot be in the future.";
-      isValid = false;
-    }
-
-    return isValid;
+  function showError(input, message) {
+    const errorSpan = input.nextElementSibling; 
+    const label = input.previousElementSibling; 
+    errorSpan.textContent = message; 
+    input.classList.add("invalid");
+    label.classList.add("error");
   }
+  
+  if (!day) {
+    showError(inputDay, "Must be a valid day.");
+    return;
+  }
+  if (!month) {
+    showError(inputMonth, "Must be a valid month.");
+    return;
+  }
+  if (!year) {
+    showError(inputYear, "Must be a valid year.");
+    return;
+  }
+  const { years, months, days } = calculateAge(day, month, year)
 
-  // Function to calculate age
+  document.querySelector(".results h1:nth-child(1) span").textContent = years
+  document.querySelector(".results h1:nth-child(2) span").textContent = months
+  document.querySelector(".results h1:nth-child(3) span").textContent = days
+
+  // Função para validar a data
+  function isValidDate(day, month, year) {
+    const date = new Date(year, month - 1, day);
+    return (
+      date.getFullYear() === year && 
+      date.getMonth() === month - 1 && 
+      date.getDate() === day 
+    );
+  }
+  // função para calcular idade
+
   function calculateAge(day, month, year) {
-    const birthDate = new Date(year, month - 1, day);
-    const currentDate = new Date();
+   
+    if (!isValidDate(day, month, year)) {
+      showError(inputDay, "invalid date");
+      return;
+    }
+    const today = new Date();
+    const birthday = new Date(year, month - 1, day);
 
-    let ageYears = currentDate.getFullYear() - birthDate.getFullYear();
-    let ageMonths = currentDate.getMonth() - birthDate.getMonth();
-    let ageDays = currentDate.getDate() - birthDate.getDate();
+    let years = today.getFullYear() - birthday.getFullYear();
+    let months = today.getMonth() - birthday.getMonth();
+    let days = today.getDate() - birthday.getDate();
 
-    // Adjust for incomplete months
-    if (ageDays < 0) {
-      ageMonths--;
-      ageDays += new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+   
+    if (days < 0) {
+      months -= 1;
+      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0); 
+      days += prevMonth.getDate();
     }
 
-    // Adjust for incomplete years
-    if (ageMonths < 0) {
-      ageYears--;
-      ageMonths += 12;
+    if (months < 0) {
+      years -= 1;
+      months += 12;
     }
 
-    return { ageYears, ageMonths, ageDays };
-  }
+    return { years, months, days }
+  };
 
-  // Validate and calculate age
-  if (validateDate(day, month, year)) {
-    const { ageYears, ageMonths, ageDays } = calculateAge(day, month, year);
 
-    resultYears.textContent = ageYears;
-    resultMonths.textContent = ageMonths;
-    resultDays.textContent = ageDays;
-
-    // Reset the form fields after calculation
-    form.reset();
-  }
 });
