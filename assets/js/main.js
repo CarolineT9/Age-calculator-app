@@ -3,58 +3,93 @@ const form = document.querySelector("#formulario");
 form.addEventListener("submit", function (event) {
   event.preventDefault();
 
+  const inputDay = document.querySelector("#day");
+  const inputMonth = document.querySelector("#month");
+  const inputYear = document.querySelector("#year");
 
-  let inputDay = document.querySelector('#day');
-  let inputMonth = document.querySelector('#month');
-  let inputYear = document.querySelector('#year');
-
-  let day = parseInt(inputDay.value)
-  let month = parseInt(inputMonth.value)
-  let year = parseInt(inputYear.value)
+  const day = inputDay.value.trim();
+  const month = inputMonth.value.trim();
+  const year = inputYear.value.trim();
 
   function showError(input, message) {
-    const errorSpan = input.nextElementSibling; 
-    const label = input.previousElementSibling; 
-    errorSpan.textContent = message; 
+    const errorSpan = input.nextElementSibling;
+    errorSpan.textContent = message;
     input.classList.add("invalid");
-    label.classList.add("error");
   }
-  
-  if (!day) {
+
+  function clearError(input) {
+    const errorSpan = input.nextElementSibling;
+    errorSpan.textContent = "";
+    input.classList.remove("invalid");
+    input.value = "";
+  }
+
+ 
+  let hasError = false;
+
+
+  if (!day || isNaN(day) || day < 1 || day > 31) {
     showError(inputDay, "Must be a valid day.");
-    return;
+    hasError = true;
+  } else {
+    clearError(inputDay);
   }
-  if (!month) {
+
+
+  if (!month || isNaN(month) || month < 1 || month > 12) {
     showError(inputMonth, "Must be a valid month.");
+    hasError = true;
+  } else {
+    clearError(inputMonth);
+  }
+
+  if (
+    !year ||
+    isNaN(year) ||
+    year.length !== 4 ||
+    year < 0 ||
+    year > new Date().getFullYear()
+  ) {
+    showError(inputYear, "Must be a valid year in yyyy format.");
+    hasError = true;
+  } else {
+    clearError(inputYear);
+  }
+
+  if (
+    !hasError &&
+    !isValidDate(parseInt(day), parseInt(month), parseInt(year))
+  ) {
+    showError(inputDay, "Invalid date.");
+    showError(inputMonth, "Invalid date.");
+    showError(inputYear, "Invalid date.");
+    hasError = true;
+  }
+
+  if (hasError) {
     return;
   }
-  if (!year) {
-    showError(inputYear, "Must be a valid year.");
-    return;
-  }
-  const { years, months, days } = calculateAge(day, month, year)
 
-  document.querySelector(".results h1:nth-child(1) span").textContent = years
-  document.querySelector(".results h1:nth-child(2) span").textContent = months
-  document.querySelector(".results h1:nth-child(3) span").textContent = days
+  const { years, months, days } = calculateAge(
+    parseInt(day),
+    parseInt(month),
+    parseInt(year)
+  );
 
-  // Função para validar a data
+  document.querySelector(".results h1:nth-child(1) span").textContent = years;
+  document.querySelector(".results h1:nth-child(2) span").textContent = months;
+  document.querySelector(".results h1:nth-child(3) span").textContent = days;
+
   function isValidDate(day, month, year) {
     const date = new Date(year, month - 1, day);
     return (
-      date.getFullYear() === year && 
-      date.getMonth() === month - 1 && 
-      date.getDate() === day 
+      date.getFullYear() === year &&
+      date.getMonth() === month - 1 &&
+      date.getDate() === day
     );
   }
-  // função para calcular idade
 
   function calculateAge(day, month, year) {
-   
-    if (!isValidDate(day, month, year)) {
-      showError(inputDay, "invalid date");
-      return;
-    }
     const today = new Date();
     const birthday = new Date(year, month - 1, day);
 
@@ -62,10 +97,9 @@ form.addEventListener("submit", function (event) {
     let months = today.getMonth() - birthday.getMonth();
     let days = today.getDate() - birthday.getDate();
 
-   
     if (days < 0) {
       months -= 1;
-      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0); 
+      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
       days += prevMonth.getDate();
     }
 
@@ -74,8 +108,6 @@ form.addEventListener("submit", function (event) {
       months += 12;
     }
 
-    return { years, months, days }
-  };
-
-
+    return { years, months, days };
+  }
 });
