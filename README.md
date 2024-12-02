@@ -36,11 +36,11 @@ Your users should be able to:
 ![](./assets/images/age-calculator-mobile.png)
 
 ### Built with
-- [Vue.js](https://vuejs.org/) - JS library
-- [Pinia](https://pinia.vuejs.org/) - Store library for Vue.js
-- [Vuetify](https://vuetifyjs.com/en/) - UI library for Vue.js
+- JavaSript
+- CSS
+- HTML 5
 
 ### Links
-https://astonishing-kashata-f11bbd.netlify.app/
+https://age-calculator-app-one-iota.vercel.app/
 ## Author
 - Frontend Mentor - [@CarolineT9](https://www.frontendmentor.io/profile/CarolineT9)
